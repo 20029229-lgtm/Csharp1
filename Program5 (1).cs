@@ -11,7 +11,7 @@ namespace SydneyCoffee
             Console.Write("Enter number of customers: ");
             int n = Convert.ToInt32(Console.ReadLine());
 
-            // Replaced arrays with dynamic Lists
+            // Lists for data storage
             List<string> name = new List<string>();
             List<int> quantity = new List<int>();
             List<string> reseller = new List<string>();
@@ -29,8 +29,19 @@ namespace SydneyCoffee
             // Loop to get inputs
             for (int i = 0; i < n; i++)
             {
-                Console.Write("Enter customer name: ");
-                name.Add(Console.ReadLine());
+                // CHANGE A: Name validation (cannot be empty)
+                string tempName;
+                do
+                {
+                    Console.Write("Enter customer name: ");
+                    tempName = Console.ReadLine().Trim();
+
+                    if (tempName == "")
+                        Console.WriteLine("Name cannot be empty. Please enter again.");
+
+                } while (tempName == "");
+
+                name.Add(tempName);
 
                 int q = 0;
                 // Quantity validation
@@ -60,10 +71,9 @@ namespace SydneyCoffee
                 string tempReseller;
                 do
                 {
-                    Console.Write("Are you a reseller? (y/n): ");   // CHANGE 1
+                    Console.Write("Are you a reseller? (y/n): ");
                     tempReseller = Console.ReadLine().ToLower();
 
-                    // CHANGE 1 → convert y/n to yes/no
                     if (tempReseller == "y") tempReseller = "yes";
                     if (tempReseller == "n") tempReseller = "no";
 
@@ -113,10 +123,19 @@ namespace SydneyCoffee
             }
 
             double average = sum / n;
-            Console.WriteLine($"Average order charge: ${average:F2}");   // CHANGE 2
+            Console.WriteLine($"Average order charge: ${average:F2}");
 
             Console.WriteLine($"Lowest charge: ${min} by {minName}");
             Console.WriteLine($"Highest charge: ${max} by {maxName}");
+
+            // CHANGE B: Summary table
+            Console.WriteLine("\n----- Customer Order Summary Table -----");
+            Console.WriteLine("Name\tQuantity\tReseller\tCharge");
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.WriteLine($"{name[i]}\t{quantity[i]}\t\t{reseller[i]}\t\t${charge[i]}");
+            }
 
             Console.WriteLine("\nThank you for using Sydney Coffee Program!");
         }
